@@ -1,0 +1,271 @@
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="jquery.cvs.js"></script>
+    <style>
+
+        .page {
+            display: grid;
+            width: 100vw;
+            height: 100vh;
+
+            grid-template-columns: 1fr max-content 1fr;
+            grid-template-rows: 1fr min-content min-content 2fr;
+
+        }
+
+        .stats {
+            position: relative;
+            height: 60px;
+            grid-row: 2;
+            grid-column: 2;
+        }
+
+
+        textarea {
+            background-attachment: scroll;
+            background-color: rgba(0, 0, 0, 0);
+            background-image: none;
+            background-origin: padding-box;
+            background-position-x: 0%;
+            background-position-y: 0%;
+            background-repeat-x:;
+            background-repeat-y:;
+            background-size: auto;
+            border-bottom-color: rgba(0, 0, 0, 0);
+            border-bottom-left-radius: 2px;
+            border-bottom-right-radius: 2px;
+            border-bottom-style: solid;
+            border-bottom-width: 1px;
+            border-image-outset: 0px;
+            border-image-repeat: stretch;
+            border-image-slice: 100%;
+            border-image-source: none;
+            border-image-width: 1;
+            border-left-color: rgba(0, 0, 0, 0);
+            border-left-style: solid;
+            border-left-width: 1px;
+            border-right-color: rgba(0, 0, 0, 0);
+            border-right-style: solid;
+            border-right-width: 1px;
+            border-top-color: rgba(0, 0, 0, 0);
+            border-top-left-radius: 2px;
+            border-top-right-radius: 2px;
+            border-top-style: solid;
+            border-top-width: 1px;
+            color: rgba(0, 0, 0, 0.87);
+            cursor: text;
+            display: block;
+            flex-direction: column;
+            font-family: "Open Sans", sans-serif;
+            font-size: 14px;
+            font-stretch: 100%;
+            font-style: normal;
+            font-variant-caps: normal;
+            font-variant-east-asian: normal;
+            font-variant-ligatures: normal;
+            font-variant-numeric: normal;
+            font-weight: 400;
+            height: 100%;
+            letter-spacing: 0.56px;
+            line-height: normal;
+            margin-bottom: 0px;
+            margin-left: 0px;
+            margin-right: 0px;
+            margin-top: 0px;
+            overflow-wrap: break-word;
+            padding-bottom: 16px;
+            padding-left: 16px;
+            padding-right: 16px;
+            padding-top: 32px;
+            resize: both;
+            text-align: start;
+            text-indent: 0px;
+            text-rendering: auto;
+            text-shadow: none;
+            text-size-adjust: 100%;
+            text-transform: none;
+            transition-delay: 0s;
+            transition-duration: 0.18s;
+            transition-property: opacity;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+            white-space: pre-wrap;
+            width: 100%;
+            word-spacing: 0px;
+            writing-mode: horizontal-tb;
+            -webkit-appearance: none;
+            -webkit-font-smoothing: antialiased;
+            -webkit-rtl-ordering: logical;
+            -webkit-border-image: none;
+        }
+
+        .textcover {
+            border-bottom-color: rgb(189, 189, 189);
+            border-bottom-left-radius: 4px;
+            border-bottom-right-radius: 4px;
+            border-bottom-style: solid;
+            border-bottom-width: 1px;
+            border-image-outset: 0px;
+            border-image-repeat: stretch;
+            border-image-slice: 100%;
+            border-image-source: none;
+            border-image-width: 1;
+            border-left-color: rgb(189, 189, 189);
+            border-left-style: solid;
+            border-left-width: 1px;
+            border-right-color: rgb(189, 189, 189);
+            border-right-style: solid;
+            border-right-width: 1px;
+            border-top-color: rgb(189, 189, 189);
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
+            border-top-style: solid;
+            border-top-width: 1px;
+            display: flex;
+            font-family: "Open Sans", sans-serif;
+            height: 202px;
+            letter-spacing: normal;
+            margin-bottom: 8px;
+            overflow-x: hidden;
+            overflow-y: hidden;
+            position: relative;
+            text-size-adjust: 100%;
+            transition-delay: 0s;
+            transition-duration: 0s;
+            transition-property: none;
+            transition-timing-function: ease;
+            width: 1280px;
+            will-change: opacity, transform, color;
+            -webkit-font-smoothing: antialiased;
+
+            grid-row: 3;
+            grid-column: 2;
+
+        }
+
+        .thingcontainer {
+            margin-left: 100px;
+            margin-right: 0;
+            width:150px;
+            float: left;
+        }
+
+    </style>
+    <script>
+
+        var FULLFILE = [];
+
+        var TODO = [];
+
+
+        function run() {
+
+            if (TODO.length === 0) {
+                $(".currentword").text("COMPLETED");
+                return;
+            }
+
+
+            let id = Math.floor(Math.random() * TODO.length);
+
+            let word = TODO[id];
+
+            $(".currentword").text(word[0]);
+            $(".currentscore").text("Left: " + TODO.length);
+            $(".wordinput").val("");
+
+            function testWord(test) {
+                if (word[1] === test) {
+                    TODO.splice(id, 1);
+                    window.setTimeout(run, 200);
+                } else {
+                    TODO.push(word);
+                    $(".wordinput").val(word[1]);
+                    $(".wordinput").prop("readonly", true);
+                    window.setTimeout(() => {
+                        $(".wordinput").prop("readonly", false);
+                        run();
+                    }, 1000);
+                }
+            }
+
+
+            $(".wordinput").off("keypress").keypress(function (e) {
+                if (e.charCode === 13) {
+                    if ($(".wordinput").val() === "" || $(".wordinput").val() === "\n"){
+                        $(".wordinput").val("");
+                    } else {
+                        testWord($(".wordinput").val());
+                    }
+                }
+            });
+
+
+        }
+
+
+        var openFile = function (event) {
+            var input = event.target;
+
+            var reader = new FileReader();
+            reader.onload = function () {
+                var text = reader.result;
+                FULLFILE = $.csv.toArrays(text);
+                window.filestuff = FULLFILE;
+                $(".numOfWords").text("Words: " + FULLFILE.length);
+            };
+            reader.readAsText(input.files[0]);
+        };
+
+        function start() {
+            var groupId = Number($(".groupNum").val())-1;
+            var num = Number($(".groupAmount").val());
+            TODO = FULLFILE.slice((groupId) * num, (groupId + 1) * num);
+
+            let start = (groupId) * num+1;
+            let end = start + TODO.length-1;
+            $(".currentGroup").text(`Selection: ${start} to ${end}`);
+
+
+            run();
+        }
+
+    </script>
+
+</head>
+<body>
+<div class="page">
+    <div class="stats">
+        <div class="thingcontainer">
+            <label style="font-size: 20px;" class="currentword">a</label>
+        </div>
+        <div class="thingcontainer">
+            <label style="font-size: 20px;" class="currentGroup">Selection: 0 to 0</label>
+            <label style="font-size: 20px;" class="currentscore">Left: 0</label>
+        </div>
+    </div>
+    <div class="textcover">
+        <textarea style="font-size: 20px;" class="wordinput" placeholder="Enter:"></textarea>
+    </div>
+    <div class="inputs">
+        <input type='file' accept='text/plain' onchange='openFile(event)'><br>
+        <label class="numOfWords" style="margin-top: 306px">SELECT FILE</label>
+
+        <div style="width:100%">
+            <input style="font-size: medium; margin-top:10px;" type="number" class="groupNum" placeholder="group"
+                   width="100%" value="1" min="1">
+        </div>
+
+        <div style="width:100%">
+            <input style="font-size: medium; margin-top:10px;" type="number" class="groupAmount" placeholder="amount"
+                   width="100%" value="50" min="1">
+        </div>
+
+        <button onclick="start()" style="width:100%; font-size: medium; margin-top: 10px;">Run</button>
+    </div>
+
+</div>
+</body>
+
+
+</html>
