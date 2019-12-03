@@ -210,7 +210,7 @@
             var reader = new FileReader();
             reader.onload = function () {
                 var text = reader.result;
-                FULLFILE = $.csv.toArrays(text);
+                FULLFILE = $.csv.toArrays(text).map(kv => kv.map(s => s.trim()));
                 window.filestuff = FULLFILE;
                 $(".numOfWords").text("Words: " + FULLFILE.length);
             };
